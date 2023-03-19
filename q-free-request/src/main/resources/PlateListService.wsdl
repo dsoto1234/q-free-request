@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="PlateListService"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+	xmlns:tns="http://intrada.cloud/platelist/service"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:ser="http://intrada.cloud/platelist/service"
+    targetNamespace="http://intrada.cloud/platelist/service">	
+
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/platelist/service">
+			<xsd:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common" />
+			<xsd:import schemaLocation="intrada.cloud.platelist.xsd" namespace="http://intrada.cloud/platelist" />
+			<xsd:include schemaLocation="intrada.cloud.platelist.service.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+	
+	<!-- AddPlateListEntriesRequest -->
+	<wsdl:message name="AddPlateListEntriesRequest">
+		<wsdl:part name="parameters" element="ser:AddPlateListEntries"/>
+	</wsdl:message>
+	<wsdl:message name="AddPlateListEntriesResponse">
+		<wsdl:part name="parameters" element="ser:AddPlateListEntriesResponse"/>
+	</wsdl:message>
+	
+	<!-- ClearPlateListRequest -->
+	<wsdl:message name="ClearPlateListRequest">
+		<wsdl:part name="parameters" element="ser:ClearPlateList"/>
+	</wsdl:message>
+	<wsdl:message name="ClearPlateListResponse">
+		<wsdl:part name="parameters" element="ser:ClearPlateListResponse"/>
+	</wsdl:message>
+	
+	<!-- ContainsPlateListEntryRequest -->
+	<wsdl:message name="ContainsPlateListEntryRequest">
+		<wsdl:part name="parameters" element="ser:ContainsPlateListEntry"/>
+	</wsdl:message>
+	<wsdl:message name="ContainsPlateListEntryResponse">
+		<wsdl:part name="parameters" element="ser:ContainsPlateListEntryResponse"/>
+	</wsdl:message>
+	
+	<!-- GetNumberOfPlateListEntriesRequest -->
+	<wsdl:message name="GetNumberOfPlateListEntriesRequest">
+		<wsdl:part name="parameters" element="ser:GetNumberOfPlateListEntries"/>
+	</wsdl:message>
+	<wsdl:message name="GetNumberOfPlateListEntriesResponse">
+		<wsdl:part name="parameters" element="ser:GetNumberOfPlateListEntriesResponse"/>
+	</wsdl:message>
+	
+	<!-- RemovePlateListEntriesRequest -->
+	<wsdl:message name="RemovePlateListEntriesRequest">
+		<wsdl:part name="parameters" element="ser:RemovePlateListEntries"/>
+	</wsdl:message>
+	<wsdl:message name="RemovePlateListEntriesResponse">
+		<wsdl:part name="parameters" element="ser:RemovePlateListEntriesResponse"/>
+	</wsdl:message>
+
+	<!-- SearchPlateListEntries -->
+	<wsdl:message name="SearchPlateListEntriesRequest">
+		<wsdl:part name="parameters" element="ser:SearchPlateListEntries"/>
+	</wsdl:message>
+	<wsdl:message name="SearchPlateListEntriesResponse">
+		<wsdl:part name="parameters" element="ser:SearchPlateListEntriesResponse"/>
+	</wsdl:message>
+
+	<!-- RemovePlateListEntriesById -->
+	<wsdl:message name="RemovePlateListEntriesByIdRequest">
+		<wsdl:part name="parameters" element="ser:RemovePlateListEntriesById"/>
+	</wsdl:message>
+	<wsdl:message name="RemovePlateListEntriesByIdResponse">
+		<wsdl:part name="parameters" element="ser:RemovePlateListEntriesByIdResponse"/>
+	</wsdl:message>
+
+	<!-- UpdatePlateListEntry -->
+	<wsdl:message name="UpdatePlateListEntryRequest">
+		<wsdl:part name="parameters" element="ser:UpdatePlateListEntry"/>
+	</wsdl:message>
+	<wsdl:message name="UpdatePlateListEntryResponse">
+		<wsdl:part name="parameters" element="ser:UpdatePlateListEntryResponse"/>
+	</wsdl:message>
+
+	<!-- LookupPlateListEntries -->
+	<wsdl:message name="LookupPlateListEntriesRequest">
+		<wsdl:part name="parameters" element="ser:LookupPlateListEntries"/>
+	</wsdl:message>
+	<wsdl:message name="LookupPlateListEntriesResponse">
+		<wsdl:part name="parameters" element="ser:LookupPlateListEntriesResponse"/>
+	</wsdl:message>
+
+	<wsdl:portType name="IPlateListService">
+		<wsdl:operation name="AddPlateListEntries">
+			<wsdl:input name="AddPlateListEntriesRequest" wsaw:Action="AddPlateListEntries" message="ser:AddPlateListEntriesRequest"/>
+			<wsdl:output name="AddPlateListEntriesResponse" wsaw:Action="AddPlateListEntriesResponse" message="ser:AddPlateListEntriesResponse"/>
+			<wsdl:documentation>Adds entries to the specified platelist with the specified names</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="ClearPlateList">
+			<wsdl:input name="ClearPlateListRequest" wsaw:Action="ClearPlateList" message="ser:ClearPlateListRequest"/>
+			<wsdl:output name="ClearPlateListResponse" wsaw:Action="ClearPlateListResponse" message="ser:ClearPlateListResponse"/>
+			<wsdl:documentation>Clears a platelist of all it's entries</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="ContainsPlateListEntry">
+			<wsdl:input name="ContainsPlateListEntryRequest" wsaw:Action="ContainsPlateListEntry" message="ser:ContainsPlateListEntryRequest"/>
+			<wsdl:output name="ContainsPlateListEntryResponse" wsaw:Action="ContainsPlateListEntryResponse" message="ser:ContainsPlateListEntryResponse"/>
+			<wsdl:documentation>Check if the specified platelist contains an entry with the specified name</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="GetNumberOfPlateListEntries">
+			<wsdl:input name="GetNumberOfPlateListEntriesRequest" wsaw:Action="GetNumberOfPlateListEntries" message="ser:GetNumberOfPlateListEntriesRequest"/>
+			<wsdl:output name="GetNumberOfPlateListEntriesResponse" wsaw:Action="GetNumberOfPlateListEntriesResponse" message="ser:GetNumberOfPlateListEntriesResponse"/>
+			<wsdl:documentation>Get the amount of entry in the specified platelist</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="RemovePlateListEntries">
+			<wsdl:input name="RemovePlateListEntriesRequest" wsaw:Action="RemovePlateListEntries" message="ser:RemovePlateListEntriesRequest"/>
+			<wsdl:output name="RemovePlateListEntriesResponse" wsaw:Action="RemovePlateListEntriesResponse" message="ser:RemovePlateListEntriesResponse"/>
+			<wsdl:documentation>Remove entries from the specified platelist with the specified names</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="SearchPlateListEntries">
+			<wsdl:input name="SearchPlateListEntriesRequest" wsaw:Action="SearchPlateListEntries" message="ser:SearchPlateListEntriesRequest"/>
+			<wsdl:output name="SearchPlateListEntriesResponse" wsaw:Action="SearchPlateListEntriesResponse" message="ser:SearchPlateListEntriesResponse"/>
+			<wsdl:documentation>Search plate list entries</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="RemovePlateListEntriesById">
+			<wsdl:input name="RemovePlateListEntriesByIdRequest" wsaw:Action="RemovePlateListEntriesById" message="ser:RemovePlateListEntriesByIdRequest"/>
+			<wsdl:output name="RemovePlateListEntriesByIdResponse" wsaw:Action="RemovePlateListEntriesByIdResponse" message="ser:RemovePlateListEntriesByIdResponse"/>
+			<wsdl:documentation>Remove plate list entries by id</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="UpdatePlateListEntry">
+			<wsdl:input name="UpdatePlateListEntryRequest" wsaw:Action="UpdatePlateListEntry" message="ser:UpdatePlateListEntryRequest"/>
+			<wsdl:output name="UpdatePlateListEntryResponse" wsaw:Action="UpdatePlateListEntryResponse" message="ser:UpdatePlateListEntryResponse"/>
+			<wsdl:documentation>Update a plate list entry</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="LookupPlateListEntries">
+			<wsdl:input name="LookupPlateListEntriesRequest" wsaw:Action="LookupPlateListEntries" message="ser:LookupPlateListEntriesRequest"/>
+			<wsdl:output name="LookupPlateListEntriesResponse" wsaw:Action="LookupPlateListEntriesResponse" message="ser:LookupPlateListEntriesResponse"/>
+			<wsdl:documentation>Lookup plate list entries</wsdl:documentation>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding type="tns:IPlateListService" name="WSHttpBinding_IPlateListService">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="AddPlateListEntries">
+			<soap12:operation style="document" soapAction="AddPlateListEntries"/>
+			<wsdl:input name="AddPlateListEntriesRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="AddPlateListEntriesResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ClearPlateList">
+			<soap12:operation style="document" soapAction="ClearPlateList"/>
+			<wsdl:input name="ClearPlateListRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="ClearPlateListResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="ContainsPlateListEntry">
+			<soap12:operation style="document" soapAction="ContainsPlateListEntry"/>
+			<wsdl:input name="ContainsPlateListEntryRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="ContainsPlateListEntryResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetNumberOfPlateListEntries">
+			<soap12:operation style="document" soapAction="GetNumberOfPlateListEntries"/>
+			<wsdl:input name="GetNumberOfPlateListEntriesRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="GetNumberOfPlateListEntriesResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="RemovePlateListEntries">
+			<soap12:operation style="document" soapAction="RemovePlateListEntries"/>
+			<wsdl:input name="RemovePlateListEntriesRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="RemovePlateListEntriesResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="SearchPlateListEntries">
+			<soap12:operation style="document" soapAction="SearchPlateListEntries"/>
+			<wsdl:input name="SearchPlateListEntriesRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="SearchPlateListEntriesResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="RemovePlateListEntriesById">
+			<soap12:operation style="document" soapAction="RemovePlateListEntriesById"/>
+			<wsdl:input name="RemovePlateListEntriesByIdRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="RemovePlateListEntriesByIdResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="UpdatePlateListEntry">
+			<soap12:operation style="document" soapAction="UpdatePlateListEntry"/>
+			<wsdl:input name="UpdatePlateListEntryRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="UpdatePlateListEntryResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="LookupPlateListEntries">
+			<soap12:operation style="document" soapAction="LookupPlateListEntries"/>
+			<wsdl:input name="LookupPlateListEntriesRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="LookupPlateListEntriesResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	
+	<wsdl:service name="PlateListService">
+		<wsdl:port name="WSHttpBinding_IPlateListService" binding="tns:WSHttpBinding_IPlateListService">
+			<soap12:address location="https://conduent-ny-intradasynergy.q-free.nl/platelistservice"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

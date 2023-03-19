@@ -1,0 +1,33 @@
+# Build stage
+FROM maven:3.6.0-jdk-11-slim AS build
+
+#WORKDIR /src 
+COPY qfree_request_service/src /home/app/src
+COPY qfree_request_service/WSDL_Files /home/app/WSDL_Files
+COPY qfree_request_service/pom.xml /home/app
+#COPY  qfree_request_service/viol-tx-event.jar /home/app
+COPY qfree_request_service/TOLLING_MODERNIZATION_TIMEZONE.jar /home/app
+COPY qfree_request_service/TimezoneUtilpom.xml /home/app
+RUN mvn install:install-file -Dfile=/home/app/TOLLING_MODERNIZATION_TIMEZONE.jar -DgroupId=com.conduent.app.timezone -DartifactId=timezone_utility -Dversion=1.0.0 -DpomFile=/home/app/TimezoneUtilpom.xml
+
+RUN mvn -f /home/app/pom.xml clean package 
+
+# Package stage
+#
+
+FROM openjdk:11-jre-slim
+
+COPY --from=build /home/app/target/*.jar /usr/local/lib/app.jar
+
+COPY qfree_request_service/Wallet_OLTPDEV /usr/local/lib/Wallet_OLTPDEV
+
+COPY qfree_request_service/WSDL_Files /home/app/WSDL_Files
+
+COPY   qfree_request_service/oci_api_key_dev.pem /usr/local/lib/oci_api_key_dev.pem
+
+COPY  qfree_request_service/config_dev.txt /usr/local/lib/config_dev.txt
+
+
+EXPOSE 8080
+
+ENTRYPOINT ["sh", "-c", "java -jar /usr/local/lib/app.jar --spring.profiles.active=dev"]

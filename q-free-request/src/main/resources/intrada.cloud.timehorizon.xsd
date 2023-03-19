@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/timehorizon" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:com="http://intrada.cloud/common">
+  <xs:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common"/>
+  <!--PassageAcknowledgementType-->
+  <xs:complexType name="PassageAcknowledgementType">
+    <xs:simpleContent>
+      <xs:extension base="com:StatusEnumeration">
+        <xs:attribute name="IssPassageID" type="com:GuidStringType" use="required"/>
+        <xs:attribute name="Description" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>

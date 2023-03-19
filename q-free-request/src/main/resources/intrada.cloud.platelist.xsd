@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/platelist" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://intrada.cloud/platelist" xmlns:com="http://intrada.cloud/common">
+  <xs:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common"/>
+  <!--PlateListAcknowledgementType-->
+  <xs:complexType name="PlateListAcknowledgementType">
+    <xs:all>
+      <xs:element name="Status" type="com:StatusEnumeration"/>
+      <xs:element name="PlateListEntry" type="tns:PlateListEntryType"/>
+    </xs:all>
+    <xs:attribute name="Description" type="xs:string" use="optional"/>
+  </xs:complexType>
+  <!--ClearAcknowledgementType-->
+  <xs:complexType name="ClearAcknowledgementType">
+    <xs:simpleContent>
+      <xs:extension base="com:StatusEnumeration">
+        <xs:attribute name="Description" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <!--AcknowledgementType-->
+  <xs:complexType name="AcknowledgementType">
+    <xs:all>
+      <xs:element name="Status" type="com:StatusEnumeration"/>
+    </xs:all>
+    <xs:attribute name="Description" type="xs:string" use="optional"/>
+  </xs:complexType>
+  <!--AcknowledgementType-->
+  <xs:complexType name="RemoveByIdAcknowledgementType">
+    <xs:all>
+      <xs:element name="Id" type="xs:long"/>
+      <xs:element name="Status" type="com:StatusEnumeration"/>
+    </xs:all>
+    <xs:attribute name="Description" type="xs:string" use="optional"/>
+  </xs:complexType>
+  <!--PlateListEntryType-->
+  <xs:complexType name="PlateListEntryType">
+    <xs:all>
+      <xs:element name="Registration" type="com:NonEmptyStringType"/>
+      <xs:element name="TypeCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="Jurisdiction" type="xs:string" minOccurs="0"/>
+      <xs:element name="DeleteTimeUTC" type="com:DateTimeUTCType" nillable="true" minOccurs="0"/>
+      <xs:element name="Comment" type="xs:string" minOccurs="0"/>
+    </xs:all>
+  </xs:complexType>
+  <!--PlateListEnumeration-->
+  <xs:simpleType name="PlateListEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CUSTOMER_FORCE_REJECT"/>
+      <xs:enumeration value="CUSTOMER_FORCE_MANUAL_REVIEW"/>
+      <xs:enumeration value="AUTOMATION_SENSITIVE"/>
+      <xs:enumeration value="MANUAL_SENSITIVE"/>
+      <xs:enumeration value="RESOLVE_CONFLICT"/>
+      <xs:enumeration value="DISPUTED"/>
+      <xs:enumeration value="PLAUSIBLE_PLATE"/>
+      <xs:enumeration value="CUSTOMER_FORCE_FIRST_N_SEEN"/>
+      <xs:enumeration value="GROUPING_COMMON_SENSE_HANDLE_BLACKLIST"/>
+      <xs:enumeration value="TRUSTED_FINGERPRINT_LIST"/>
+      <xs:enumeration value="CUSTOMER_DECIDED_UNBILLABLE_JURISDICTION"/>
+      <xs:enumeration value="CUSTOMER_FORCE_DO_NOT_BILL"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--PlateListEntrySearchResultType-->
+  <xs:complexType name="PlateListEntrySearchResultType">
+    <xs:sequence>
+      <xs:element name="Id" type="xs:long"/>
+      <xs:element name="PlateList" type="xs:string" minOccurs="0"/>
+      <xs:element name="Registration" type="com:NonEmptyStringType"/>
+      <xs:element name="TypeCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="Jurisdiction" type="xs:string" minOccurs="0"/>
+      <xs:element name="CreatedByIssUserId" type="xs:string" minOccurs="0"/>
+      <xs:element name="CreatedByEndUserId" type="xs:string" minOccurs="0"/>
+      <xs:element name="CreateTimeUTC" type="com:DateTimeUTCType"/>
+      <xs:element name="LastModifiedByIssUserId" type="xs:string" minOccurs="0"/>
+      <xs:element name="LastModifiedByEndUserId" type="xs:string" minOccurs="0"/>
+      <xs:element name="LastModifiedTimeUTC" type="com:DateTimeUTCType" nillable="true"/>
+      <xs:element name="DeletedByIssUserId" type="xs:string" minOccurs="0"/>
+      <xs:element name="DeletedByEndUserId" type="xs:string" minOccurs="0"/>
+      <xs:element name="DeleteTimeUTC" type="com:DateTimeUTCType" nillable="true"/>
+      <xs:element name="Comment" type="xs:string" minOccurs="0"/>
+      <xs:element name="AuditEntries" type="tns:PlateListAuditEntryType" minOccurs="0" maxOccurs="500"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--PlateListAuditEntryType-->
+  <xs:complexType name="PlateListAuditEntryType">
+    <xs:all>
+      <xs:element name="TimestampUTC" type="com:DateTimeUTCType"/>
+      <xs:element name="Description" type="xs:string" minOccurs="0"/>
+      <xs:element name="IssUserId" type="xs:string" minOccurs="0"/>
+      <xs:element name="EndUserId" type="xs:string" minOccurs="0"/>
+    </xs:all>
+  </xs:complexType>
+</xs:schema>

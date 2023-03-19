@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<springProfile name="local">
+		<property name="USER_HOME"
+			value="C:\\workspacesSTD\\springBootBatch\\log\\qfree_request_service" />			
+	</springProfile>
+	
+	<springProfile name="dev">
+		<property name="USER_HOME"
+			value="C:\\workspacesSTD\\springBootBatch\\log" />
+	</springProfile>
+	
+	<springProfile name="qa">
+		<property name="USER_HOME"
+			value="C:\\workspacesSTD\\springBootBatch\\log" />
+	</springProfile>
+	
+	<springProfile name="demo">
+		<property name="USER_HOME"
+			value="C:\\workspacesSTD\\springBootBatch\\log" />
+	</springProfile>
+	
+	<springProfile name="uat">
+		<property name="USER_HOME"
+			value="C:\\workspacesSTD\\springBootBatch\\log" />
+	</springProfile>
+	
+	<appender name="FILE-THREAD"	class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator>
+			<key>logFileName</key>
+			<defaultValue>qfree_request_service</defaultValue>
+		</discriminator>
+		<sift>
+			<!-- A standard RollingFileAppender, the log file is based on 'logFileName' at runtime -->
+			<appender name="FILE-${logFileName}"	class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<file>${USER_HOME}/${logFileName}.log</file>
+				<encoder	class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+					<Pattern> %d{yy-MM-dd HH:mm:ss:SSS} [%level] - %msg%n </Pattern>
+				</encoder>
+
+				<rollingPolicy	class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<fileNamePattern>${USER_HOME}/%d{yyyy-MM-dd}/${logFileName}.log</fileNamePattern>
+					<maxHistory>7</maxHistory>					
+				</rollingPolicy>
+			</appender>
+		</sift>
+	</appender>
+	
+	 <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    	<encoder>
+      		<pattern>%d{HH:mm:ss.SSS} %-5level [%thread] %logger{36} - %msg%n</pattern>
+    	</encoder>
+  	</appender>
+  
+    <!--  just added it -->
+  	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    	<file>${USER_HOME}/${logFileName}.log</file>
+      	<encoder>
+        	<Pattern> %d{yy-MM-dd HH:mm:ss:SSS} [%level] - %msg%n </Pattern>
+      	</encoder>
+  	</appender>
+
+	<logger name="com.conduent" level="info" additivity="false">
+		<appender-ref ref="FILE-THREAD" />
+	</logger>
+
+
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+		<!--  <appender-ref ref="FILE-THREAD" /> -->		
+	</root>
+</configuration>

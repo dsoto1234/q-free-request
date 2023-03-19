@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qfree-request-service-deployment
+spec:
+  selector:
+    matchLabels:
+      app: qfree-request-service
+  replicas: 1
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate: 
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: qfree-request-service
+    spec:
+      containers:
+      - name: qfree-request-service
+    # enter the path to your image, be sure to include the correct region prefix    
+        
+        image: iad.ocir.io/iddewqtahvnn/tolling_dev_cont_registry:latest
+        env:
+        - name: DB_IBTS_USER
+          valueFrom:
+            secretKeyRef:
+              name: db-security-ibts
+              key: spring.db.ibts.username
+        - name: DB_IBTS_PASSWD
+          valueFrom:
+            secretKeyRef:
+              name: db-security-ibts
+              key: spring.db.ibts.password
+        - name: IMAGE_MATCHING_STREAM_ID
+          valueFrom:
+            configMapKeyRef:
+              name: ibts-oci-streamid
+              key: config.imagematching.streamid
+        volumeMounts:
+        - name: nfs
+          mountPath: "/DevokeFss/"
+        ports:
+        - containerPort: 80
+        imagePullPolicy: Always
+      imagePullSecrets:
+    # enter the name of the secret you created  
+      - name: ocirsecret
+      dnsConfig:
+        nameservers:
+        - 169.254.169.254
+      volumes:
+      - name: nfs
+        persistentVolumeClaim:
+          claimName: oke-fsspvc
+          readOnly: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qfree-request-service
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080 
+  selector:
+    app: qfree-request-service

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="ManualReviewService"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+	xmlns:tns="http://intrada.cloud/manualreview/service"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:ser="http://intrada.cloud/manualreview/service"
+    targetNamespace="http://intrada.cloud/manualreview/service">
+
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/manualreview/service">
+			<xsd:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common" />
+			<xsd:import schemaLocation="intrada.cloud.manualreview.xsd" namespace="http://intrada.cloud/manualreview"/>
+			<xsd:include schemaLocation="intrada.cloud.manualreview.service.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="AcknowledgeTasksRequest">
+		<wsdl:part name="parameters" element="ser:AcknowledgeTasks"/>
+	</wsdl:message>
+	<wsdl:message name="AcknowledgeTasksResponse">
+		<wsdl:part name="parameters" element="ser:AcknowledgeTasksResponse"/>
+	</wsdl:message>
+	<wsdl:message name="CompleteTasksRequest">
+		<wsdl:part name="parameters" element="ser:CompleteTasks"/>
+	</wsdl:message>
+	<wsdl:message name="CompleteTasksResponse">
+		<wsdl:part name="parameters" element="ser:CompleteTasksResponse"/>
+	</wsdl:message>
+	<wsdl:message name="GetTasksRequest">
+		<wsdl:part name="parameters" element="ser:GetTasks"/>
+	</wsdl:message>
+	<wsdl:message name="GetTasksResponse">
+		<wsdl:part name="parameters" element="ser:GetTasksResponse"/>
+	</wsdl:message>
+
+	<wsdl:portType name="IManualReviewService">
+		<wsdl:operation name="AcknowledgeTasks">
+			<wsdl:input name="AcknowledgeTasksRequest" message="ser:AcknowledgeTasksRequest" wsaw:Action="AcknowledgeTasks"/>
+			<wsdl:output name="AcknowledgeTasksResponse" message="ser:AcknowledgeTasksResponse" wsaw:Action="AcknowledgeTasksResponse"/>
+			<wsdl:documentation>Acknowledges manual review tasks</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="CompleteTasks">
+			<wsdl:input name="CompleteTasksRequest" message="ser:CompleteTasksRequest" wsaw:Action="CompleteTasks"/>
+			<wsdl:output name="CompleteTasksResponse" message="ser:CompleteTasksResponse" wsaw:Action="CompleteTasksResponse"/>
+			<wsdl:documentation>Submits manual review tasks results</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="GetTasks">
+			<wsdl:input name="GetTasksRequest" message="ser:GetTasksRequest" wsaw:Action="GetTasks"/>
+			<wsdl:output name="GetTasksResponse" message="ser:GetTasksResponse" wsaw:Action="GetTasksResponse"/>
+			<wsdl:documentation>Request manual review tasks</wsdl:documentation>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="WSHttpBinding_IManualReviewService" type="tns:IManualReviewService">		
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="AcknowledgeTasks">
+			<soap12:operation style="document" soapAction="AcknowledgeTasks"/>
+			<wsdl:input name="AcknowledgeTasksRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="AcknowledgeTasksResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="CompleteTasks">
+			<soap12:operation style="document" soapAction="CompleteTasks"/>
+			<wsdl:input name="CompleteTasksRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="CompleteTasksResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="GetTasks">
+			<soap12:operation style="document" soapAction="GetTasks"/>
+			<wsdl:input name="GetTasksRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="GetTasksResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="ManualReviewService">
+		<wsdl:port name="WSHttpBinding_IManualReviewService" binding="tns:WSHttpBinding_IManualReviewService">
+			<soap12:address location="https://conduent-ny-intradasynergy.q-free.nl/manualreviewservice"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

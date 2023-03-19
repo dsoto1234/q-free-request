@@ -1,0 +1,385 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	<bean class="java.util.HashMap" id="queries">
+		<constructor-arg>
+			<map>
+
+				<entry key="GET_FROM_TCODES"
+					value="SELECT CODE_ID, CODE_TYPE, CODE_VALUE FROM MASTER.T_CODES WHERE CODE_TYPE IN ('TX_STATUS','EVENT_TYPE') AND CODE_VALUE IN ('IMGREVIEW','DMVREREVIEW','IMGREREVIEW','LPRREQUESTED')"></entry>
+
+				<entry key="GET_FROM_T_PROCESS_PARAMETER"
+					value="SELECT AGENCY_ID, PARAM_NAME, PARAM_GROUP, PARAM_CODE, PARAM_VALUE, STORE_ID, PARAM_CONFIG FROM MASTER.T_PROCESS_PARAMETERS WHERE PARAM_GROUP IN( :PARAM_GROUP )"></entry>
+
+				<entry
+					key="GET_ALL_TXNS_FROM_LPR_TABLE_WITHOUT_PLAZA_AGENCY_COND"
+					value="SELECT ack_status,agency_id,created_by,create_ts,image_receive_date,image_tx_id,iss_passage_id,lane_tx_id,lpr_source,lpr_status,lpr_subtype,lpr_type,ort_flag,output_file_id,output_file_type,plaza_id,unmatched_entry_flag,updated_by,update_ts FROM t_lpr_queue WHERE lpr_status = 'TO_BE_ENQUEUED' AND lpr_type = :LPR_TYPE AND ROWNUM &lt;= :BATCH_SIZE"></entry>
+
+				<entry key="GET_ALL_TXNS_FROM_LPR_TABLE_WITH_PLAZA_COND"
+					value="SELECT ack_status,agency_id,created_by,create_ts,image_receive_date,image_tx_id,iss_passage_id,lane_tx_id,lpr_source,lpr_status,lpr_subtype,lpr_type,ort_flag,output_file_id,output_file_type,plaza_id,unmatched_entry_flag,updated_by,update_ts FROM t_lpr_queue WHERE lpr_status = 'TO_BE_ENQUEUED' AND agency_id = :AGENCY_ID AND lpr_type = :LPR_TYPE AND plaza_id = :PLAZA_ID AND ROWNUM &lt;= :BATCH_SIZE"></entry>
+
+				<entry key="GET_ALL_TXNS_FROM_LPR_TABLE_WITH_AGENCY_COND"
+					value="SELECT ack_status,agency_id,created_by,create_ts,image_receive_date,image_tx_id,iss_passage_id,lane_tx_id,lpr_source,lpr_status,lpr_subtype,lpr_type,ort_flag,output_file_id,output_file_type,plaza_id,unmatched_entry_flag,updated_by,update_ts FROM t_lpr_queue WHERE lpr_status = 'TO_BE_ENQUEUED' AND agency_id = :AGENCY_ID AND lpr_type = :LPR_TYPE AND ROWNUM &lt;= :BATCH_SIZE"></entry>
+
+				<entry key="UPDATE_LPR_STATUS"
+					value="UPDATE IBTS.T_LPR_QUEUE SET LPR_STATUS=:LPR_STATUS,UPDATE_TS=:UPDATE_TS where LPR_STATUS='TO_BE_ENQUEUED' AND LANE_TX_ID=:LANE_TX_ID"></entry>
+
+				<entry key="CHECK_LPR_STATUS_IN_T_LPR_QUEUE"
+					value="SELECT COUNT(*) FROM T_LPR_QUEUE WHERE LPR_STATUS=:LPR_STATUS AND LANE_TX_ID=:MSG_KEY"></entry>
+
+				<entry key="UPDATE_T_LPR_QUEUE_LPR_STATUS"
+					value="UPDATE IBTS.T_LPR_QUEUE SET LPR_STATUS=:LPR_STATUS,UPDATE_TS=:UPDATE_TS WHERE LANE_TX_ID=:MSG_KEY"></entry>
+
+				<entry key="GET_TX_TO_ENQUEUE_FOR_NORMAL_AIR"
+					value="select /*+ FIRST_ROWS */ distinct * from (SELECT
+				    NVL(lpr_view.lane_tx_id, '0')                                                             lane_tx_id,
+				    lpr_view.tx_date as tx_date,
+				    to_char(lpr_view.tx_timestamp, 'yyyy-mm-dd HH24:MI:SS.FF') AS tx_timestamp,
+				    nvl(lpr_view.agency_short_name, '')agency_short_name,
+				    lpr_view.agency_id                                                                         agency_id,
+				    lpr_view.plaza_id,
+				    nvl(lpr_view.plaza_name, '')                                                               plaza_name,
+				    lpr_view.lane_id,
+				    lpr_view.actual_axles,
+				    nvl(lpr_view.img_file_index, '') image_file_index,
+				    nvl(lpr_view.out_file_name, '') out_file_name,
+				    nvl(lpr_view.proc_image_cnt, '0') proc_image_cnt,
+				    nvl(lpr_view.image_url1, '') image_url1,
+				    nvl(lpr_view.image_url2, '')image_url2,
+				    nvl(lpr_view.image_url3, '')image_url3,
+				    nvl(lpr_view.image_url4, '')image_url4,
+				    nvl(lpr_view.image_url5, '')image_url5,
+				    nvl(lpr_view.image_url6, '')image_url6,
+				    nvl(lpr_view.image_url7, '')image_url7,
+				    nvl(lpr_view.image_url8, '')image_url8,
+				    nvl(lpr_view.image_index1, '')image_index1,
+				    nvl(lpr_view.image_index2, '')image_index2,
+				    nvl(lpr_view.image_index3, '')image_index3,
+				    nvl(lpr_view.image_index4, '')image_index4,
+				    nvl(lpr_view.image_index5, '')image_index5,
+				    nvl(lpr_view.image_index6, '')image_index6,
+				    nvl(lpr_view.image_index7, '')image_index7,
+				    nvl(lpr_view.image_index8, '')image_index8,
+				    nvl(decode(lpr_view.image_facing1, 'F', 'front', 'R', 'back',
+				               'O', 'overview', lpr_view.image_facing1), '')                                           image_facing1,
+				    nvl(decode(lpr_view.image_facing2, 'F', 'front', 'R', 'back',
+				               'O', 'overview', lpr_view.image_facing2), '')                                           image_facing2,
+				    nvl(decode(lpr_view.image_facing3, 'F', 'front', 'R', 'back',
+				               'O', 'overview', lpr_view.image_facing3), '')                                           image_facing3,
+				    nvl(decode(lpr_view.image_facing4, 'F', 'front', 'R', 'back',
+				               'O', 'overview', lpr_view.image_facing4), '')                                           image_facing4,
+				    nvl(decode(lpr_view.image_facing5, 'F', 'front', 'R', 'back',
+				               'O', 'overview', lpr_view.image_facing5), '')                                           image_facing5,
+				    nvl(decode(lpr_view.image_facing6, 'F', 'front', 'R', 'back',
+				               'O', 'overview', lpr_view.image_facing6), '')                                           image_facing6,
+				    nvl(decode(lpr_view.image_facing7, 'F', 'front', 'R', 'back',
+				               'O', 'overview', lpr_view.image_facing7), '')                                           image_facing7,
+				    nvl(decode(lpr_view.image_facing8, 'F', 'front', 'R', 'back',
+				               'O', 'overview', lpr_view.image_facing8), '')                                           image_facing8,
+				    decode(que.lpr_type, 'MIR', 'true', 'false')                                             lpr_type,
+				    nvl(extract_lpr_flag1, 'N')extract_lpr_flag1,
+				    nvl(extract_lpr_flag2, 'N')extract_lpr_flag2,
+				    nvl(extract_lpr_flag3, 'N')extract_lpr_flag3,
+				    nvl(extract_lpr_flag4, 'N')extract_lpr_flag4,
+				    nvl(extract_lpr_flag5, 'N')extract_lpr_flag5,
+				    nvl(extract_lpr_flag6, 'N')extract_lpr_flag6,
+				    nvl(extract_lpr_flag7, 'N')extract_lpr_flag7,
+				    nvl(extract_lpr_flag8, 'N')extract_lpr_flag8,
+				    nvl(lpr_view.unmatched_entry_flag, 'N')                                                    unmatched_entry_flag,
+				    nvl(lpr_view.section_id, '')section_id,
+				    nvl(lpr_view.aet_flag, '')aet_flag,
+				    que.image_receive_date as image_receive_date,
+				    que.lpr_status as lpr_status,
+				    lpr_view.image_tx_id ,
+				    lpr_view.actual_class,
+				    lpr_view.ext_plaza_id,
+				    lpr_view.ext_lane_id
+				FROM
+				    t_lpr_queue         que,
+				    v_lpr_queue_details lpr_view
+				WHERE
+						lpr_view.lane_tx_id=que.lane_tx_id
+					AND que.LPR_STATUS = :LPR_STATUS                          
+					AND que.AGENCY_ID = decode(:AGENCY_ID, 0, que.agency_id, :AGENCY_ID)	
+					AND que.plaza_id = decode(:PLAZA_ID, 0, que.plaza_id, :PLAZA_ID) 
+					AND que.lpr_type = :LPR_TYPE
+                    AND mod(que.lane_tx_id, :TOTAL_THREADS)  = :THREAD_INDEX
+				   AND que.image_receive_date IS NOT NULL
+				   AND ROWNUM &lt;= :BATCH_SIZE
+                   ) reftable
+				ORDER BY
+				    reftable.tx_date,
+				    reftable.section_id,
+				    reftable.plaza_id,
+				    reftable.aet_flag,
+				    reftable.unmatched_entry_flag,
+				    reftable.image_receive_date ASC"></entry>
+
+				<entry key="GET_TX_TO_ENQUEUE_FOR_MIR_ONLY"
+					value=" select /*+ FIRST_ROWS */ distinct * from (select
+				      nvl(lpr_view.lane_tx_id,'0') lane_tx_id,         
+		            nvl(TO_CHAR(lpr_view.tx_date,'DD/MM/YYYY'),'01/01/2099')tx_date,              
+		            nvl(to_char(lpr_view.tx_timestamp, 'yyyy-mm-dd HH24:MI:SS.FF'),'2099-01-01 01:01:01.001') as tx_TimeStamp,              
+		            nvl(lpr_view.agency_short_name,'') agency_short_name,  
+		            lpr_view.agency_id ,  
+		            lpr_view.plaza_id,  
+		            nvl(lpr_view.PLAZA_NAME,'') plaza_name, 
+		            lpr_view.lane_id,   
+		            lpr_view.actual_axles axle_count,        
+		            nvl(lpr_view.IMG_FILE_INDEX,'') img_file_index, 
+		            nvl(lpr_view.out_file_name,'')out_file_name,  
+		            nvl(lpr_view.PROC_IMAGE_CNT,'0')proc_image_cnt,                                         
+		            nvl(lpr_view.IMAGE_URL1,'')image_url1,
+		            nvl(lpr_view.IMAGE_URL2,'')image_url2,       
+		            nvl(lpr_view.IMAGE_URL3,'')image_url3,
+		            nvl(lpr_view.IMAGE_URL4,'')image_url4,
+		            nvl(lpr_view.IMAGE_URL5,'')image_url5,
+		            nvl(lpr_view.IMAGE_URL6,'')image_url6,
+		            nvl(lpr_view.IMAGE_URL7,'')image_url7,
+		            nvl(lpr_view.IMAGE_URL8,'')image_url8,
+		            nvl(lpr_view.image_index1,'')image_index1,
+		            nvl(lpr_view.image_index2,'')image_index2,
+		            nvl(lpr_view.image_index3,'')image_index3,
+		            nvl(lpr_view.image_index4,'')image_index4,
+		            nvl(lpr_view.image_index5,'')image_index5,
+		            nvl(lpr_view.image_index6,'')image_index6,
+		            nvl(lpr_view.image_index7,'')image_index7,
+		            nvl(lpr_view.image_index8,'')image_index8,
+		         		           
+		           nvl(decode(lpr_view.image_facing1, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing1),'') image_facing1,                        
+               nvl(decode(lpr_view.image_facing2, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing2),'') image_facing2,                        
+               nvl(decode(lpr_view.image_facing3, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing3),'') image_facing3,                        
+               nvl(decode(lpr_view.image_facing4, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing4),'') image_facing4,                        
+               nvl(decode(lpr_view.image_facing5, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing5),'') image_facing5,                                              
+               nvl(decode(lpr_view.image_facing6, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing6),'') image_facing6,                        
+               nvl(decode(lpr_view.image_facing7, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing7),'') image_facing7,                        
+               nvl(decode(lpr_view.image_facing8, 'F', 'front', 'R', 'back', 'O',  'overview', lpr_view.image_facing8),'') image_facing8,               
+		           
+		           
+		           decode(queue.lpr_type, 'MIR', 'true', 'false')  lpr_type,           
+		           nvl(extract_lpr_flag1,'N')extract_lpr_flag1,
+		           nvl(extract_lpr_flag2,'N')extract_lpr_flag2,
+		           nvl(extract_lpr_flag3,'N')extract_lpr_flag3,
+		           nvl(extract_lpr_flag4,'N')extract_lpr_flag4,
+		           nvl(extract_lpr_flag5,'N')extract_lpr_flag5,
+		           nvl(extract_lpr_flag6,'N')extract_lpr_flag6,
+		           nvl(extract_lpr_flag7,'N')extract_lpr_flag7,
+		           nvl(extract_lpr_flag8,'N')extract_lpr_flag8,
+		           nvl(lpr_view.unmatched_entry_flag, 'N') unmatched_entry_flag,		           
+		           nvl(lpr_view.section_id,'')section_id,  
+                   nvl(lpr_view.aet_flag,'') aet_flag, 
+                   nvl(TO_CHAR(queue.image_receive_date,'DD/MM/YYYY'),'01/01/2099') image_receive_date,
+                   queue.lpr_status as lpr_status,
+                    lpr_view.IMAGE_TX_ID, 
+                    lpr_view.ACTUAL_CLASS, 
+                    lpr_view.ext_plaza_id,
+                    lpr_view.ext_lane_id
+                                                                          
+		       FROM
+		            t_lpr_queue queue, V_LPR_QUEUE_DETAILS lpr_view
+		       WHERE
+		       		lpr_view.lane_tx_id=queue.lane_tx_id
+					AND queue.LPR_STATUS = :LPR_STATUS                          
+					AND queue.AGENCY_ID = decode(:AGENCY_ID, 0, queue.agency_id, :AGENCY_ID) 	
+					AND queue.plaza_id = decode(:PLAZA_ID, 0, queue.plaza_id, :PLAZA_ID) 
+					AND queue.lpr_type = :LPR_TYPE
+                    AND mod(queue.lane_tx_id, :TOTAL_THREADS)  = :THREAD_INDEX
+				   AND queue.image_receive_date IS NOT NULL
+				   AND ROWNUM &lt;= :BATCH_SIZE
+		       	  )reftable
+		  
+		       ORDER BY reftable.tx_date, reftable.section_id, reftable.plaza_id, reftable.aet_flag, reftable.unmatched_entry_flag, reftable.image_receive_date asc 
+       	"></entry>
+
+				<entry key="GET_TX_TO_ENQUEUE_FOR_DISPUTE"
+					value=" select /*+ FIRST_ROWS */ distinct * from (select
+				      nvl(lpr_view.lane_tx_id,'0') lane_tx_id,         
+		            nvl(TO_CHAR(lpr_view.tx_date,'DD/MM/YYYY'),'01/01/2099')tx_date,              
+		            nvl(to_char(lpr_view.tx_timestamp, 'yyyy-mm-dd HH24:MI:SS.FF'),'2099-01-01 01:01:01.001') as tx_TimeStamp,              
+		            nvl(lpr_view.agency_short_name,'') agency_short_name,  
+		            lpr_view.agency_id ,  
+		            lpr_view.plaza_id,  
+		            nvl(lpr_view.PLAZA_NAME,'') plaza_name, 
+		            lpr_view.lane_id,   
+		            lpr_view.actual_axles axle_count,        
+		            nvl(lpr_view.IMG_FILE_INDEX,'') img_file_index, 
+		            nvl(lpr_view.out_file_name,'')out_file_name,  
+		            nvl(lpr_view.PROC_IMAGE_CNT,'0')proc_image_cnt,                                         
+		            nvl(lpr_view.IMAGE_URL1,'')image_url1,
+		            nvl(lpr_view.IMAGE_URL2,'')image_url2,       
+		            nvl(lpr_view.IMAGE_URL3,'')image_url3,
+		            nvl(lpr_view.IMAGE_URL4,'')image_url4,
+		            nvl(lpr_view.IMAGE_URL5,'')image_url5,
+		            nvl(lpr_view.IMAGE_URL6,'')image_url6,
+		            nvl(lpr_view.IMAGE_URL7,'')image_url7,
+		            nvl(lpr_view.IMAGE_URL8,'')image_url8,
+		            nvl(lpr_view.image_index1,'')image_index1,
+		            nvl(lpr_view.image_index2,'')image_index2,
+		            nvl(lpr_view.image_index3,'')image_index3,
+		            nvl(lpr_view.image_index4,'')image_index4,
+		            nvl(lpr_view.image_index5,'')image_index5,
+		            nvl(lpr_view.image_index6,'')image_index6,
+		            nvl(lpr_view.image_index7,'')image_index7,
+		            nvl(lpr_view.image_index8,'')image_index8,
+		         		           
+		           nvl(decode(lpr_view.image_facing1, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing1),'') image_facing1,                        
+               nvl(decode(lpr_view.image_facing2, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing2),'') image_facing2,                        
+               nvl(decode(lpr_view.image_facing3, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing3),'') image_facing3,                        
+               nvl(decode(lpr_view.image_facing4, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing4),'') image_facing4,                        
+               nvl(decode(lpr_view.image_facing5, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing5),'') image_facing5,                                              
+               nvl(decode(lpr_view.image_facing6, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing6),'') image_facing6,                        
+               nvl(decode(lpr_view.image_facing7, 'F', 'front', 'R', 'back',  'O', 'overview', lpr_view.image_facing7),'') image_facing7,                        
+               nvl(decode(lpr_view.image_facing8, 'F', 'front', 'R', 'back', 'O',  'overview', lpr_view.image_facing8),'') image_facing8,               
+		           
+		           
+		           decode(queue.lpr_type, 'MIR', 'true', 'false')  lpr_type,           
+		           nvl(extract_lpr_flag1,'N')extract_lpr_flag1,
+		           nvl(extract_lpr_flag2,'N')extract_lpr_flag2,
+		           nvl(extract_lpr_flag3,'N')extract_lpr_flag3,
+		           nvl(extract_lpr_flag4,'N')extract_lpr_flag4,
+		           nvl(extract_lpr_flag5,'N')extract_lpr_flag5,
+		           nvl(extract_lpr_flag6,'N')extract_lpr_flag6,
+		           nvl(extract_lpr_flag7,'N')extract_lpr_flag7,
+		           nvl(extract_lpr_flag8,'N')extract_lpr_flag8,
+		           nvl(lpr_view.unmatched_entry_flag, 'N') unmatched_entry_flag,		           
+		           nvl(lpr_view.section_id,'')section_id,  
+                   nvl(lpr_view.aet_flag,'') aet_flag, 
+                   nvl(TO_CHAR(queue.image_receive_date,'DD/MM/YYYY'),'01/01/2099') image_receive_date,
+                   queue.lpr_status as lpr_status,
+                    lpr_view.IMAGE_TX_ID, 
+                    lpr_view.ACTUAL_CLASS, 
+                    lpr_view.ext_plaza_id,
+                    lpr_view.ext_lane_id
+                                                                          
+		       FROM
+		            t_lpr_queue queue, V_LPR_QUEUE_DETAILS lpr_view
+		       WHERE 
+		        	lpr_view.lane_tx_id=queue.lane_tx_id
+					AND queue.LPR_STATUS = :LPR_STATUS                          
+					AND queue.AGENCY_ID = decode(:AGENCY_ID, 0, queue.agency_id, :AGENCY_ID) 	
+					AND queue.plaza_id = decode(:PLAZA_ID, 0, queue.plaza_id, :PLAZA_ID) 
+					AND queue.lpr_type = :LPR_TYPE
+                    AND mod(queue.lane_tx_id, :TOTAL_THREADS)  = :THREAD_INDEX
+				   AND queue.image_receive_date IS NOT NULL
+				   AND ROWNUM &lt;= :BATCH_SIZE
+		       	  )reftable
+		  
+		       ORDER BY reftable.tx_date, reftable.section_id, reftable.plaza_id, reftable.aet_flag, reftable.unmatched_entry_flag, reftable.image_receive_date asc 
+       	"></entry>
+
+				<entry key="SELECT_T_VIOL_XFER_STATISTICS_CNT_SQL"
+					value="SELECT viol_xfer_file_id FROM T_VIOL_XFER_STATISTICS 
+						WHERE agency_id = :AGENCY_ID AND tx_date = to_date(:TX_DATE, 'yyyy-mm-dd')AND section_id = :SECTION_ID AND plaza_id = :PLAZA_ID
+						AND aet_flag = :AET_FLAG
+						AND is_unmatched = :IS_UNMATCHED
+						AND image_receive_date = :IMAGE_RECEIVE_DATE
+						AND trunc(file_date) = trunc(current_timestamp(2))     
+						AND record_count &lt; :VAR_RECORD_COUNT 
+						AND ROWNUM  = 1 "></entry>
+
+				<entry key="GET_VIOL_XFER_FILE_ID_SEQ_NUM"
+					value="select SEQ_VIOL_XFER_FILE_ID.NEXTVAL as SEQ_NUM from dual"></entry>
+
+				<entry key="INSERT_T_VIOL_XFER_STATISTICS_SQL"
+					value="INSERT INTO T_VIOL_XFER_STATISTICS (viol_xfer_file_id, file_type, record_count, process_flag,    
+						agency_id, is_double_blind, reviewed_count, 			 
+						tx_date, section_id, plaza_id, aet_flag,  is_rereview, is_unmatched, image_receive_date,
+						file_date, update_ts)
+						values(:VIOL_XFER_FILE_ID,:FILE_TYPE,:RECORD_COUNT,:PROCESS_FLAG,
+					   :AGENCY_ID,:IS_DOUBLE_BLIND,:REVIEWED_COUNT,  
+					   :TX_DATE,:SECTION_ID,:PLAZA_ID,:AET_FLAG,:IS_REREVIEW,:IS_UNMATCHED,:IMAGE_RECEIVE_DATE,			  
+					   current_timestamp(2), current_timestamp(2))"></entry>
+
+				<entry key="UPDATE_T_VIOL_XFER_STATISTICS_SQL"
+					value="UPDATE T_VIOL_XFER_STATISTICS
+						SET
+							process_flag = :PROCESS_FLAG,                                     
+				            update_ts		=  current_timestamp(2),	 /* to_date(?,'MM/dd/yyyy HH24:MI:SS'), */
+				            record_count	= record_count +1 			
+						WHERE
+				            viol_xfer_file_id = :VIOL_XFER_FILE_ID"></entry>
+
+				<entry
+					key="Update_T_VIOL_IMAGE_TX_QFREE_TX_WITHOUT_MIR_OR_REREVIEW"
+					value="UPDATE T_VIOL_IMAGE_TX  
+						SET 
+							PROCESS_FLAG = :PROCESS_FLAG,
+							tr_file_id = :TR_FILE_ID,
+							UPDATE_TS = CURRENT_TIMESTAMP(2) 			
+						WHERE 
+							lane_tx_id= :LANE_TX_ID"></entry>
+
+				<entry key="ENQUEUE_UPDATE_T_VIOL_TX_STATUS"
+					value="UPDATE t_viol_tx
+				           SET
+				           	   output_file_type       = :OUTPUT_FILE_TYPE,
+				           	   PREV_TX_STATUS		  = TX_STATUS,	
+				               TX_STATUS         	  = decode(TX_STATUS,:EXISTING_TX_STATUS,:TX_STATUS,:QFREE_TX_STATUS),               
+				               prev_event_type		  =	EVENT_TYPE,
+				               event_type             = nvl(:EVENT_TYPE,3),                
+				               event_timestamp        = CURRENT_TIMESTAMP(2),
+				               update_ts              = CURRENT_TIMESTAMP(2),
+				               image_batch_id         =  :IMAGE_BATCH_ID,
+				               image_batch_seq_number = -1,
+				               output_file_id		  = :OUTPUT_FILE_ID  
+							where lane_Tx_id = :LANE_TX_ID"></entry>
+
+				<entry key="Update_T_LPR_QUEUE_WITHOUT_MIR"
+					value="UPDATE T_LPR_QUEUE     
+						SET 
+							LPR_STATUS = :LPR_STATUS,   
+							ACK_STATUS 	= :ACK_STATUS, 
+							ISS_PASSAGE_ID = :ISS_PASSAGE_ID,
+							LPR_TYPE = :LPR_TYPE,
+							UPDATE_TS = current_timestamp(2),
+							OUTPUT_FILE_TYPE = :OUTPUT_FILE_TYPE,
+							OUTPUT_FILE_ID = :OUTPUT_FILE_ID,
+							IMAGE_TX_ID = :IMAGE_TX_ID, 
+							UNMATCHED_ENTRY_FLAG = :UNMATCHED_ENTRY_FLAG,
+							ACTUAL_CLASS      = :ACTUAL_CLASS,
+							VEHICLE_TYPE_REQUIRE = :VEHICLE_TYPE_REQUIRE								
+						WHERE	
+							LANE_TX_ID  = :LANE_TX_ID"></entry>
+
+				<entry key="Insert_T_LPR_ACK_INFO"
+					value="INSERT INTO T_LPR_ACK_INFO (
+						HOST_PASSAGE_ID, ISS_PASSAGE_ID, ACK_TYPE, ACK_STATUS, ACK_DESCRIPTION, 
+						NUMBER_OF_ATTEMPTS, ACK_FROM, ACK_TO, CREATED_BY, UPDATED_BY, 
+						CREATE_TS, UPDATE_TS, THREAD_ID) 
+							VALUES(
+						:HOST_PASSAGE_ID,:ISS_PASSAGE_ID,:ACK_TYPE,:ACK_STATUS,:ACK_DESCRIPTION,
+					    :NUMBER_OF_ATTEMPTS,:ACK_FROM,:ACK_TO, 'PBATCH','PBATCH',
+						current_timestamp(2),current_timestamp(2), :THREAD_ID)"></entry>
+
+				<entry key="Update_T_LPR_QUEUE_With_DB_ERROR"
+					value="UPDATE T_LPR_QUEUE     
+						SET 
+							LPR_STATUS = :LPR_STATUS,    
+							UPDATE_TS = current_timestamp(2)				
+						WHERE	
+							LANE_TX_ID  = :LANE_TX_ID"></entry>
+
+				<entry key="Get_from_Q_FREE_REQUEST_BATCH"
+					value="SELECT RUN_ID, AGENCY_ID, PLAZA_ID, IS_ENABLED, LPR_TYPE, EXECUTION_STATUS, START_TIME, TOTAL_THREADS,THREAD_INDEX, END_TIME, BATCH_SIZE FROM Q_FREE_REQUEST_BATCH WHERE IS_ENABLED='Y' AND EXECUTION_STATUS='N'"></entry>
+
+				<entry
+					key="UPDATE_Q_FREE_REQ_BATCH_EXECUTION_STATUS_AND_START_TIME"
+					value="UPDATE IBTS.q_free_request_batch SET execution_status=:EXECUTION_STATUS,start_time=:START_TIME where run_id=:RUN_ID"></entry>
+
+				<entry
+					key="UPDATE_Q_FREE_REQ_BATCH_EXECUTION_STATUS_AND_END_TIME"
+					value="UPDATE IBTS.q_free_request_batch SET execution_status=:EXECUTION_STATUS,end_time=:END_TIME where run_id=:RUN_ID"></entry>
+
+				<entry
+					key="CHECK_SIMILAR_ROW_BATCH_TABLE"
+					value="select COUNT(*) from q_free_request_batch WHERE AGENCY_ID=:AGENCY_ID AND PLAZA_ID=:PLAZA_ID AND LPR_TYPE=:LPR_TYPE AND EXECUTION_STATUS = 'Y' AND IS_ENABLED = 'Y' AND RUN_ID !=:RUN_ID AND THREAD_INDEX =:THREAD_INDEX"></entry>
+				
+				<entry
+					key="GET_AGENCY_SHORT_NAME"
+					value="select agency_short_name from crm.v_agency where agency_id=:AGENCY_ID"></entry>
+				
+				
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

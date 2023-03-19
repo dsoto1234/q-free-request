@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/passage" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:com="http://intrada.cloud/common">
+  <xs:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common"/>
+  <!--ResultAcknowledgementType-->
+  <xs:complexType name="ResultAcknowledgementType">
+    <xs:simpleContent>
+      <xs:extension base="com:StatusEnumeration">
+        <xs:attribute name="IssPassageID" type="xs:string" use="optional"/>
+        <xs:attribute name="Description" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <!--PassageType-->
+  <xs:complexType name="PassageType">
+    <xs:sequence>
+      <xs:element name="Source" type="xs:string" minOccurs="0"/>
+      <xs:element name="CaptureTimeUTC" type="xs:dateTime" minOccurs="0"/>
+      <xs:element name="Image" type="com:ImageType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="MetadataItem" type="com:MetadataItemType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="TuningWorkflowDetails" type="com:TuningWorkflowDetailType" minOccurs="0" nillable="true"/>
+      <xs:element name="DisputeWorkflowDetails" type="com:DisputeWorkflowDetailType" minOccurs="0" nillable="true"/>
+      <xs:element name="Operator" type="xs:string" minOccurs="0" nillable="true"/>
+      <xs:element name="TollSystem" type="xs:string" minOccurs="0" nillable="true"/>
+      <xs:element name="Roadway" type="xs:string" minOccurs="0" nillable="true"/>
+      <xs:element name="Plaza" type="xs:string" minOccurs="0" nillable="true"/>
+      <xs:element name="Lane" type="xs:string" minOccurs="0" nillable="true"/>
+      <xs:element name="AxleCount" type="xs:int" minOccurs="0" nillable="true"/>
+      <xs:element name="VehicleClass" type="xs:string" minOccurs="0" nillable="true"/>
+    </xs:sequence>
+    <xs:attribute name="HostPassageID" type="xs:string" use="optional"/>
+    <xs:attribute name="ExpirationTimeUTC" type="xs:dateTime" use="optional"/>
+    <xs:attribute name="Priority" type="com:PriorityEnumeration" use="optional"/>
+    <xs:attribute name="Workflow" type="com:WorkflowEnumeration" use="optional"/>
+  </xs:complexType>
+  <!--DisputePassageType-->
+  <xs:complexType name="DisputePassageType">
+    <xs:all>
+      <xs:element name="DisputeWorkflowDetails" type="com:DisputeWorkflowDetailType" minOccurs="0"/>
+      <xs:element name="HostPassageID" type="xs:string" minOccurs="0"/>
+      <xs:element name="IssPassageID" type="xs:string" minOccurs="0" nillable="true"/>
+    </xs:all>
+  </xs:complexType>
+  <!--DisputeAcknowledgementType-->
+  <xs:complexType name="DisputeAcknowledgementType">
+    <xs:simpleContent>
+      <xs:extension base="com:StatusEnumeration">
+        <xs:attribute name="HostPassageID" type="xs:string" use="required"/>
+        <xs:attribute name="IssPassageID" type="xs:string" use="optional"/>
+        <xs:attribute name="OriginalIssPassageID" type="xs:string" use="optional"/>
+        <xs:attribute name="Description" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <!--PassageAcknowledgementType-->
+  <xs:complexType name="PassageAcknowledgementType">
+    <xs:simpleContent>
+      <xs:extension base="com:StatusEnumeration">
+        <xs:attribute name="HostPassageID" type="xs:string" use="required"/>
+        <xs:attribute name="IssPassageID" type="xs:string" use="optional"/>
+        <xs:attribute name="Description" type="xs:string" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <!--PassageResultType-->
+  <xs:complexType name="PassageResultType">
+    <xs:sequence>
+      <xs:element name="Plate" type="com:PlateType" minOccurs="0"/>
+      <xs:element name="Reject" type="xs:string" minOccurs="0"/>
+      <xs:element name="Abort" type="xs:string" minOccurs="0"/>
+      <xs:element name="RuleDescription" type="xs:string" minOccurs="0"/>
+      <xs:element name="Image" type="com:ImageType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="MetadataItem" type="com:MetadataItemType" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="AuditEntry" type="com:AuditEntryType" minOccurs="0" maxOccurs="100"/>
+    </xs:sequence>
+    <xs:attribute name="HostPassageID" type="xs:string" use="required"/>
+    <xs:attribute name="IssPassageID" type="xs:string" use="required"/>
+    <xs:attribute name="Type" type="com:ResultEnumeration" use="required"/>
+    <xs:attribute name="ReceiveTimeUTC" type="com:DateTimeUTCType" use="required"/>
+    <xs:attribute name="CompletionTimeUTC" type="com:DateTimeUTCType" use="required"/>
+    <xs:attribute name="RejectCategory" type="com:RejectCategoryEnumeration"/>
+    <xs:attribute name="Workflow" type="com:WorkflowEnumeration"/>
+    <xs:attribute name="IsConfirmedDispute" type="xs:boolean"/>
+  </xs:complexType>
+</xs:schema>

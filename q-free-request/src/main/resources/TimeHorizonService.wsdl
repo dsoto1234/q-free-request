@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions name="TimeHorizonService"
+	xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+	xmlns:tns="http://intrada.cloud/timehorizon/service"
+	xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+	xmlns:wsu="http://docs.oasisopen.org/wss/2004/01/oasis200401wsswssecurityutility1.0.xsd"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:ser="http://intrada.cloud/timehorizon/service"
+    targetNamespace="http://intrada.cloud/timehorizon/service">	
+
+	<wsdl:types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/timehorizon/service">
+			<xsd:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common" />
+			<xsd:import schemaLocation="intrada.cloud.timehorizon.xsd" namespace="http://intrada.cloud/timehorizon" />
+			<xsd:include schemaLocation="intrada.cloud.timehorizon.service.xsd" />
+		</xsd:schema>
+	</wsdl:types>
+
+	<wsdl:message name="GetTimeHorizonRequest">
+		<wsdl:part name="parameters" element="ser:GetTimeHorizon"/>
+	</wsdl:message>
+	<wsdl:message name="GetTimeHorizonResponse">
+		<wsdl:part name="parameters" element="ser:GetTimeHorizonResponse"/>
+	</wsdl:message>
+	<wsdl:message name="BacklogPassagesRequest">
+		<wsdl:part name="parameters" element="ser:BacklogPassages"/>
+	</wsdl:message>
+	<wsdl:message name="BacklogPassagesResponse">
+		<wsdl:part name="parameters" element="ser:BacklogPassagesResponse"/>
+	</wsdl:message>
+	
+	<wsdl:portType name="ITimeHorizonService">
+		<wsdl:operation name="GetTimeHorizon">
+			<wsdl:input name="GetTimeHorizonRequest" message="ser:GetTimeHorizonRequest" wsaw:Action="GetTimeHorizon"/>
+			<wsdl:output name="GetTimeHorizonResponse" message="ser:GetTimeHorizonResponse" wsaw:Action="GetTimeHorizonResponse"/>
+			<wsdl:documentation>Returns the date and time of the oldest passage, filtered by source if specified and either passages that are to be manually labbeled or not</wsdl:documentation>
+		</wsdl:operation>
+		<wsdl:operation name="BacklogPassages">
+			<wsdl:input name="BacklogPassagesRequest" message="ser:BacklogPassagesRequest" wsaw:Action="BacklogPassages"/>
+			<wsdl:output name="BacklogPassagesResponse" message="ser:BacklogPassagesResponse" wsaw:Action="BacklogPassagesResponse"/>
+			<wsdl:documentation>Exclude passages from the MIR time horizon</wsdl:documentation>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="WSHttpBinding_ITimeHorizonService" type="tns:ITimeHorizonService">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="GetTimeHorizon">
+			<soap12:operation style="document" soapAction="GetTimeHorizon"/>
+			<wsdl:input name="GetTimeHorizonRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="GetTimeHorizonResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="BacklogPassages">
+			<soap12:operation style="document" soapAction="BacklogPassages"/>
+			<wsdl:input name="BacklogPassagesRequest">
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="BacklogPassagesResponse">
+				<soap12:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	
+	<wsdl:service name="TimeHorizonService">
+		<wsdl:port name="WSHttpBinding_ITimeHorizonService" binding="tns:WSHttpBinding_ITimeHorizonService">
+			<soap12:address location="https://conduent-ny-intradasynergy.q-free.nl/timehorizonservice"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/passage/service" xmlns:com="http://intrada.cloud/common" xmlns:pas="http://intrada.cloud/passage" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common"/>
+  <xs:import schemaLocation="intrada.cloud.passage.xsd" namespace="http://intrada.cloud/passage"/>
+  <!--AcknowledgeResults-->
+  <!--Request-->
+  <xs:element name="AcknowledgeResults">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Acknowledgement" type="pas:ResultAcknowledgementType" maxOccurs="1000"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="AcknowledgeResultsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="AcknowledgementResult" type="pas:ResultAcknowledgementType" maxOccurs="1000"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--EnqueuePassages-->
+  <!--Request-->
+  <xs:element name="EnqueuePassages">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Passage" type="pas:PassageType" maxOccurs="500"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="EnqueuePassagesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="EnqueueResult" type="pas:PassageAcknowledgementType" maxOccurs="500"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--EnqueueDisputes-->
+  <!--Request-->
+  <xs:element name="EnqueueDisputes">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="DisputePassage" type="pas:DisputePassageType" maxOccurs="500"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="EnqueueDisputesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="EnqueueResult" type="pas:DisputeAcknowledgementType" maxOccurs="500"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--GetResults-->
+  <!--Request-->
+  <xs:element name="GetResults">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="MaxResults" type="xs:int"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="GetResultsResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="PassageResult" type="pas:PassageResultType" maxOccurs="250"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

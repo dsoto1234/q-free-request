@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/timehorizon/service" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:com="http://intrada.cloud/common" xmlns:tim="http://intrada.cloud/timehorizon">
+  <xs:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common"/>
+  <xs:import schemaLocation="intrada.cloud.timehorizon.xsd" namespace="http://intrada.cloud/timehorizon"/>
+  <!--GetTimeHorizon-->
+  <!--Request-->
+  <xs:element name="GetTimeHorizon">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Source" type="xs:string" minOccurs="0"/>
+        <xs:element name="IncludeManualTasks" type="xs:boolean" minOccurs="0" nillable="true"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="GetTimeHorizonResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="HorizonTimeUTC" type="com:DateTimeUTCType" minOccurs="0" nillable="true"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--BacklogPassages-->
+  <!--Request-->
+  <xs:element name="BacklogPassages">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="IssPassageID" type="com:GuidStringType" maxOccurs="1000"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="BacklogPassagesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Acknowledgement" type="tim:PassageAcknowledgementType" maxOccurs="1000"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

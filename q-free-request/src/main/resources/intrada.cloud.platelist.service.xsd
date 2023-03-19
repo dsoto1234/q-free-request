@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/platelist/service" xmlns:tns="http://intrada.cloud/platelist/service" xmlns:com="http://intrada.cloud/common" xmlns:pla="http://intrada.cloud/platelist" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common"/>
+  <xs:import schemaLocation="intrada.cloud.platelist.xsd" namespace="http://intrada.cloud/platelist"/>
+  <!--AddPlateListEntries-->
+  <!--Request-->
+  <xs:element name="AddPlateListEntries">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="PlateList" type="pla:PlateListEnumeration"/>
+        <xs:element name="PlateListEntry" type="pla:PlateListEntryType" maxOccurs="1000"/>
+        <xs:element name="EndUserId" type="xs:string" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="AddPlateListEntriesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="AddAcknowledgement" type="pla:PlateListAcknowledgementType" maxOccurs="1000"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--ClearPlateList-->
+  <!--Request-->
+  <xs:element name="ClearPlateList">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="PlateList" type="pla:PlateListEnumeration"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="ClearPlateListResponse">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="ClearAcknowledgement" type="pla:ClearAcknowledgementType"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--ContainsPlateListEntry-->
+  <!--Request-->
+  <xs:element name="ContainsPlateListEntry">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="PlateList" type="pla:PlateListEnumeration"/>
+        <xs:element name="PlateListEntry" type="pla:PlateListEntryType"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="ContainsPlateListEntryResponse">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="Contains" type="xs:boolean"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--GetNumberOffPlateListEntries-->
+  <!--Request-->
+  <xs:element name="GetNumberOfPlateListEntries">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="PlateList" type="pla:PlateListEnumeration"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="GetNumberOfPlateListEntriesResponse">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="Count" type="xs:int"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--RemovePlateList-->
+  <!--Request-->
+  <xs:element name="RemovePlateListEntries">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="PlateList" type="pla:PlateListEnumeration"/>
+        <xs:element name="PlateListEntry" type="pla:PlateListEntryType" maxOccurs="1000"/>
+        <xs:element name="EndUserId" type="xs:string" minOccurs="0"/>
+        <xs:element name="HardDelete" type="xs:boolean" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="RemovePlateListEntriesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="RemoveAcknowledgement" type="pla:PlateListAcknowledgementType" maxOccurs="1000"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--SearchPlateListEntries-->
+  <!--Request-->
+  <!--Note: string properties are allowed to contain wildcards '*' and '?'-->
+  <xs:element name="SearchPlateListEntries">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="PlateList" type="pla:PlateListEnumeration" nillable="true"/>
+        <xs:element name="IncludeDeleted" type="xs:boolean"/>
+        <xs:element name="Registration" type="xs:string" minOccurs="0"/>
+        <xs:element name="Jurisdiction" type="xs:string" minOccurs="0"/>
+        <xs:element name="PlateType" type="xs:string" minOccurs="0"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="SearchPlateListEntriesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Status" type="com:StatusEnumeration"/>
+        <xs:element name="FoundEntries" type="xs:long"/>
+        <xs:element name="TotalEntries" type="xs:long"/>
+        <xs:element name="PlateListEntries" type="pla:PlateListEntrySearchResultType" maxOccurs="500" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--RemovePlateList-->
+  <!--Request-->
+  <xs:element name="RemovePlateListEntriesById">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="PlateListEntryIds" type="xs:long" maxOccurs="1000"/>
+        <xs:element name="EndUserId" type="xs:string" minOccurs="0"/>
+        <xs:element name="HardDelete" type="xs:boolean" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="RemovePlateListEntriesByIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Acknowledgements" type="pla:RemoveByIdAcknowledgementType" maxOccurs="1000"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--UpdatePlateListEntry-->
+  <!--Request-->
+  <xs:element name="UpdatePlateListEntry">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="Id" type="xs:long"/>
+        <xs:element name="EndUserId" type="xs:string" minOccurs="0"/>
+        <xs:element name="UseDeleteTimeValue" type="xs:boolean" minOccurs="0"/>
+        <xs:element name="DeleteTimeUTC" type="com:DateTimeUTCType" nillable="true" minOccurs="0"/>
+        <xs:element name="Comment" type="xs:string" minOccurs="0"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="UpdatePlateListEntryResponse">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="Acknowledgement" type="pla:AcknowledgementType"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--LookupPlateListEntries-->
+  <!--Request-->
+  <xs:element name="LookupPlateListEntries">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="PlateList" type="pla:PlateListEnumeration"/>
+        <xs:element name="IgnorePlateType" type="xs:boolean"/>
+        <xs:element name="IncludeDeleted" type="xs:boolean"/>
+        <xs:element name="PlateListEntries" type="pla:PlateListEntryType" maxOccurs="250"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="LookupPlateListEntriesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Status" type="com:StatusEnumeration"/>
+        <xs:element name="Description" type="xs:string" nillable="true" minOccurs="0"/>
+        <xs:element name="PlateListEntries" type="pla:PlateListEntryType" maxOccurs="unbounded"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

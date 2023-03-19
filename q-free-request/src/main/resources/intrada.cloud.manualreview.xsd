@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/manualreview" xmlns:tns="http://intrada.cloud/manualreview" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:com="http://intrada.cloud/common">
+  <xs:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common"/>
+  <!--TaskAcknowledgementType-->
+  <xs:complexType name="TaskAcknowledgementType">
+    <xs:simpleContent>
+      <xs:extension base="com:StatusEnumeration">
+        <xs:attribute name="IssTaskID" type="com:GuidStringType" use="required"/>
+        <xs:attribute name="Description" type="xs:string" use="optional"/>
+        <xs:attribute name="ErrorCode" type="tns:CompleteTaskErrorCodeEnumeration" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <!--TaskResultType-->
+  <xs:complexType name="TaskResultType">
+    <xs:sequence>
+      <xs:element name="Reject" type="xs:string" minOccurs="0"/>
+      <xs:element name="MetadataItem" type="com:MetadataItemType" minOccurs="0" maxOccurs="200"/>
+      <xs:element name="AuditEntry" type="com:AuditEntryType" minOccurs="0" maxOccurs="100"/>
+    </xs:sequence>
+    <xs:attribute name="IssTaskID" type="com:GuidStringType" use="required"/>
+    <xs:attribute name="RejectCategory" type="com:RejectCategoryEnumeration"/>
+  </xs:complexType>
+  <!--TaskType-->
+  <xs:complexType name="TaskType">
+    <xs:sequence>
+      <xs:element name="Type" type="com:NonEmptyStringType"/>
+      <xs:element name="Image" type="com:ImageType" minOccurs="0" maxOccurs="10"/>
+      <xs:element name="MetadataItem" type="com:MetadataItemType" minOccurs="0" maxOccurs="200"/>
+    </xs:sequence>
+    <xs:attribute name="IssTaskID" type="com:GuidStringType" use="required"/>
+    <xs:attribute name="CreationTimeUTC" type="com:DateTimeUTCType" use="required"/>
+    <xs:attribute name="ExpirationTimeUTC" type="com:DateTimeUTCType" use="optional"/>
+  </xs:complexType>
+  <!--CompleteTaskErrorCodeEnumeration-->
+  <xs:simpleType name="CompleteTaskErrorCodeEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="ISS_JOB_NOT_FOUND"/>
+      <xs:enumeration value="ISS_JOB_PASSAGE_NOT_FOUND"/>
+      <xs:enumeration value="ISS_JOB_PASSAGE_ABORTED"/>
+      <xs:enumeration value="TASK_NO_LONGER_IN_QUEUE"/>
+      <xs:enumeration value="TASK_ANSWER_ALREADY_EXISTS_ON_PASSAGE"/>
+      <xs:enumeration value="TASK_ANSWER_ALREADY_IN_DATABASE"/>
+      <xs:enumeration value="TASK_ANSWER_DUPLICATE_IN_BATCH"/>
+      <xs:enumeration value="SERVER_BUSY"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

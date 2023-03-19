@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/manualreview/service" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:com="http://intrada.cloud/common" xmlns:man="http://intrada.cloud/manualreview">
+  <xs:import schemaLocation="intrada.cloud.common.xsd" namespace="http://intrada.cloud/common"/>
+  <xs:import schemaLocation="intrada.cloud.manualreview.xsd" namespace="http://intrada.cloud/manualreview"/>
+  <!--AcknowledgeTasks-->
+  <!--Request-->
+  <xs:element name="AcknowledgeTasks">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Acknowledgement" type="man:TaskAcknowledgementType" maxOccurs="1000"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="AcknowledgeTasksResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="AcknowledgementResult" type="man:TaskAcknowledgementType" maxOccurs="1000"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--CompleteTasks-->
+  <!--Request-->
+  <xs:element name="CompleteTasks">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="TaskResult" type="man:TaskResultType" maxOccurs="500"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="CompleteTasksResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Acknowledgement" type="man:TaskAcknowledgementType" maxOccurs="500"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!--GetTasks-->
+  <!--Request-->
+  <xs:element name="GetTasks">
+    <xs:complexType>
+      <xs:all>
+        <xs:element name="Queue" type="com:NonEmptyStringType"/>
+        <xs:element name="MaxTasks" type="xs:int"/>
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <!--Response-->
+  <xs:element name="GetTasksResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Task" type="man:TaskType" maxOccurs="250"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

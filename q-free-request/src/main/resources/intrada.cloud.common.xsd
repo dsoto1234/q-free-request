@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" targetNamespace="http://intrada.cloud/common" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://intrada.cloud/common">
+  <!--Complex Types-->
+  <!--MetadataItemType-->
+  <xs:complexType name="MetadataItemType">
+    <xs:all>
+      <xs:element name="Key" type="xs:string" minOccurs="0"/>
+      <xs:element name="Value" type="xs:string" minOccurs="0"/>
+    </xs:all>
+    <xs:attribute name="Target" type="tns:TargetEnumeration" use="optional"/>
+    <xs:attribute name="Origin" type="tns:OriginEnumeration" use="optional"/>
+  </xs:complexType>
+  <!--ImageType-->
+  <xs:complexType name="ImageType">
+    <xs:sequence>
+      <xs:element name="Uri" type="xs:string" minOccurs="0" nillable="true"/>
+      <xs:element name="Data" type="xs:base64Binary" minOccurs="0" nillable="true"/>
+      <xs:element name="MetadataItem" type="tns:MetadataItemType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="HostImageID" type="xs:string" use="optional"/>
+    <xs:attribute name="IssImageID" type="xs:string" use="optional"/>
+    <xs:attribute name="CameraID" type="xs:string" use="optional"/>
+    <xs:attribute name="VehicleSide" type="tns:VehicleSideEnumeration" use="optional"/>
+  </xs:complexType>
+  <!--ImageContentTypeEnumeration-->
+  <xs:simpleType name="ImageContentTypeEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OriginalImage"/>
+      <xs:enumeration value="RegionOfInterestImage"/>
+      <xs:enumeration value="PrivacyFilteredImage"/>
+      <xs:enumeration value="Overview"/>
+      <xs:enumeration value="Other"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--ConfidenceType-->
+  <xs:simpleType name="ConfidenceType">
+    <xs:restriction base="xs:int">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="1000"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--PlateType-->
+  <xs:complexType name="PlateType">
+    <xs:all>
+      <xs:element name="Registration" type="xs:string"/>
+      <xs:element name="Jurisdiction" type="xs:string"/>
+      <xs:element name="TypeCode" type="xs:string" minOccurs="0"/>
+      <xs:element name="Confidence" type="tns:ConfidenceType"/>
+    </xs:all>
+  </xs:complexType>
+  <!--AuditEntryType-->
+  <xs:complexType name="AuditEntryType">
+    <xs:simpleContent>
+      <xs:extension base="tns:NonEmptyStringType">
+        <xs:attribute name="EntryTimeUTC" type="tns:DateTimeUTCType" use="required"/>
+        <xs:attribute name="Actor" type="tns:ActorEnumeration" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <!--TuningWorkflowDetailType-->
+  <xs:complexType name="TuningWorkflowDetailType">
+    <xs:all>
+      <xs:element name="Truth" type="tns:TruthType" minOccurs="0" nillable="true"/>
+    </xs:all>
+  </xs:complexType>
+  <!--DisputeWorkflowDetailType-->
+  <xs:complexType name="DisputeWorkflowDetailType">
+    <xs:all>
+      <xs:element name="OriginalIdentification" type="tns:OriginalIdentificationType" minOccurs="0" nillable="true"/>
+      <xs:element name="SuggestedIdentification" type="tns:IdentificationType" minOccurs="0" nillable="true"/>
+      <xs:element name="DisputeReason" type="xs:string" minOccurs="0"/>
+      <xs:element name="DisputeCategory" type="tns:DisputeCategoryEnumeration" minOccurs="0" nillable="true"/>
+    </xs:all>
+  </xs:complexType>
+  <!--ImageOfRecordType-->
+  <xs:complexType name="ImageOfRecordType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="RoiTop" type="xs:int"/>
+        <xs:attribute name="RoiBottom" type="xs:int"/>
+        <xs:attribute name="RoiLeft" type="xs:int"/>
+        <xs:attribute name="RoiRight" type="xs:int"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <!--TruthType-->
+  <xs:complexType name="TruthType">
+    <xs:all>
+      <xs:element name="Registration" type="xs:string" minOccurs="0"/>
+      <xs:element name="Jurisdiction" type="xs:string" minOccurs="0"/>
+      <xs:element name="PlateType" type="xs:string" minOccurs="0"/>
+      <xs:element name="ImageOfRecord" type="tns:ImageOfRecordType" minOccurs="0" nillable="true"/>
+      <xs:element name="RejectReason" type="xs:string" minOccurs="0"/>
+      <xs:element name="RejectCategory" type="tns:RejectCategoryEnumeration" minOccurs="0" nillable="true"/>
+    </xs:all>
+  </xs:complexType>
+  <!--VehicleType-->
+  <xs:complexType name="VehicleType">
+    <xs:all>
+      <xs:element name="Make" type="xs:string" minOccurs="0"/>
+      <xs:element name="Model" type="xs:string" minOccurs="0"/>
+      <xs:element name="Color" type="xs:string" minOccurs="0"/>
+    </xs:all>
+  </xs:complexType>
+  <!--IdentificationType-->
+  <xs:complexType name="IdentificationType">
+    <xs:sequence>
+      <xs:element name="Registration" type="xs:string" minOccurs="0"/>
+      <xs:element name="Jurisdiction" type="xs:string" minOccurs="0"/>
+      <xs:element name="PlateType" type="xs:string" minOccurs="0"/>
+      <xs:element name="Vehicle" type="tns:VehicleType" minOccurs="0" nillable="true"/>
+    </xs:sequence>
+  </xs:complexType>
+  <!--OriginalIdentificationType-->
+  <xs:complexType name="OriginalIdentificationType">
+    <xs:complexContent>
+      <xs:extension base="tns:IdentificationType">
+        <xs:sequence>
+          <xs:element name="Type" type="tns:ResultEnumeration" minOccurs="0" nillable="true"/>
+          <xs:element name="ImageOfRecord" type="tns:ImageOfRecordType" minOccurs="0" nillable="true"/>
+          <xs:element name="OriginalCompletionTimeUTC" type="xs:dateTime" minOccurs="0" nillable="true"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!--Simple Types-->
+  <!--GuidStringType-->
+  <xs:simpleType name="GuidStringType">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:length value="36"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--NonEmptyStringElement-->
+  <xs:simpleType name="NonEmptyStringType">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:minLength value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--DateTimeUTCElement-->
+  <xs:simpleType name="DateTimeUTCType">
+    <xs:restriction base="xs:dateTime">
+      <xs:pattern value=".*(Z|\+00:00)"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--Enumerations-->
+  <!--ActorEnumeration-->
+  <xs:simpleType name="ActorEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="HOST"/>
+      <xs:enumeration value="ISS"/>
+      <xs:enumeration value="MIR"/>
+      <xs:enumeration value="OPERATOR"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--StatusEnumeration-->
+  <xs:simpleType name="StatusEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OK"/>
+      <xs:enumeration value="REJECT"/>
+      <xs:enumeration value="RETRY"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--TargetEnumeration-->
+  <xs:simpleType name="TargetEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NONE"/>
+      <xs:enumeration value="MIR"/>
+      <xs:enumeration value="RESULT"/>
+      <xs:enumeration value="MIR_RESULT"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--OriginEnumeration-->
+  <xs:simpleType name="OriginEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="IssFramework"/>
+      <xs:enumeration value="Iss"/>
+      <xs:enumeration value="Host"/>
+      <xs:enumeration value="ManualReview"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--PriorityEnumeration-->
+  <xs:simpleType name="PriorityEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NORMAL"/>
+      <xs:enumeration value="FASTTRACK"/>
+      <xs:enumeration value="BACKLOG"/>
+      <xs:enumeration value="DIRECT"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--ResultEnumeration-->
+  <xs:simpleType name="ResultEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="TRUSTWORTHY_AUTO"/>
+      <xs:enumeration value="TRUSTWORTHY_MANUAL"/>
+      <xs:enumeration value="TRUSTWORTHY_MIX"/>
+      <xs:enumeration value="ABORTED_EXPIRED"/>
+      <xs:enumeration value="ABORTED_MANUAL"/>
+      <xs:enumeration value="ABORTED_ERROR"/>
+      <xs:enumeration value="ABORTED_INTERNAL"/>
+      <xs:enumeration value="UNCERTAIN_UNDECIDED"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--WorkflowEnumeration-->
+  <xs:simpleType name="WorkflowEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NORMAL"/>
+      <xs:enumeration value="AIR_ONLY"/>
+      <xs:enumeration value="MIR_ONLY"/>
+      <xs:enumeration value="DISPUTE"/>
+      <xs:enumeration value="TUNING"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--DisputeCategoryEnumeration-->
+  <xs:simpleType name="DisputeCategoryEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="CUSTOMER_COMPLAINT_MISREAD"/>
+      <xs:enumeration value="CUSTOMER_COMPLAINT_OTHER"/>
+      <xs:enumeration value="DMV_REJECT"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--RejectCategoryEnumeration-->
+  <xs:simpleType name="RejectCategoryEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="OTHER"/>
+      <xs:enumeration value="RECURRENT_PLATE_VISIBILITY"/>
+      <xs:enumeration value="EPHEMERAL_PLATE_VISIBILITY"/>
+      <xs:enumeration value="CAMERA_IMAGING_PROBLEM"/>
+      <xs:enumeration value="PASSAGE_PROBLEM"/>
+      <xs:enumeration value="CUSTOMER_BUSINESS_RULES"/>
+      <xs:enumeration value="UNBILLABLE_PASSAGE"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <!--VehicleSideEnumeration-->
+  <xs:simpleType name="VehicleSideEnumeration">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NotSet"/>
+      <xs:enumeration value="VehicleFront"/>
+      <xs:enumeration value="VehicleRear"/>
+      <xs:enumeration value="Unknown"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
